@@ -466,6 +466,7 @@ insert:
 		if (lines > 0)
 			return;
 		/* fallthrough */
+	case XK_ISO_Left_Tab:
 	case XK_Up:
 	case XK_KP_Up:
 		if (sel && sel->left && (sel = sel->left)->right == curr) {
@@ -497,7 +498,6 @@ insert:
 		if (sel)
 			sel->out = 1;
 		break;
-	case XK_Right:
 	case XK_KP_Right:
 		if (text[cursor] != '\0') {
 			cursor = nextrune(+1);
@@ -506,6 +506,7 @@ insert:
 		if (lines > 0)
 			return;
 		/* fallthrough */
+	case XK_Tab:
 	case XK_Down:
 	case XK_KP_Down:
 		if (sel && sel->right && (sel = sel->right) == next) {
@@ -513,7 +514,7 @@ insert:
 			calcoffsets();
 		}
 		break;
-	case XK_Tab:
+	case XK_Right:
 		if (!sel)
 			return;
 		cursor = strnlen(sel->text, sizeof text - 1);
