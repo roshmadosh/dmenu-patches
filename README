@@ -1,24 +1,22 @@
-dmenu - dynamic menu
+dmenu - dynamic menu (with Hiroshi's patches)
 ====================
-dmenu is an efficient dynamic menu for X.
+The formatting of this document was left as is, cuz why not.
 
+Patches include:
 
-Requirements
+- Tab + Shift-Tab keybinds for moving the cursor between options.
+- A `-c` option for making dmenu "float" in the center of the screen.
+
+Testing
 ------------
-In order to build dmenu you need the Xlib header files.
+I used gdb to debug in a nested X environment using Xephyr.  
 
+To start the environment:
+```
+Xephyr :1 -screen 1280x800 2>&1 /dev/null &
+```  
 
-Installation
-------------
-Edit config.mk to match your local setup (dmenu is installed into
-the /usr/local namespace by default).
-
-Afterwards enter the following command to build and install dmenu
-(if necessary as root):
-
-    make clean install
-
-
-Running dmenu
--------------
-See the man page for details.
+After starting gdb, you can enter the following to use the nested environment for testing:
+```
+set environment DISPLAY :1
+```
