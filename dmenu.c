@@ -43,6 +43,7 @@ static struct item *items = NULL;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
+static int ctr_flg;
 
 static Atom clip, utf8;
 static Display *dpy;
@@ -670,7 +671,15 @@ setup(void)
 
 		x = info[i].x_org;
 		y = info[i].y_org + (topbar ? 0 : info[i].height - mh);
+
 		mw = info[i].width;
+
+		if (ctr_flg == 1) { 
+			mw /= 3; 
+			x = (info[i].width - mw) / 2; 
+			y = (info[i].height - mh) / 2;
+		}
+
 		XFree(info);
 	} else
 #endif
@@ -681,6 +690,13 @@ setup(void)
 		x = 0;
 		y = topbar ? 0 : wa.height - mh;
 		mw = wa.width;
+
+		if (ctr_flg == 1) {
+			mw /= 3;
+			x = (wa.width - mw) / 2;
+			y = (wa.height - mh) / 2;
+		}
+
 	}
 	promptw = (prompt && *prompt) ? TEXTW(prompt) - lrpad / 4 : 0;
 	inputw = mw / 3; /* input width: ~33% of monitor width */
@@ -720,7 +736,7 @@ setup(void)
 static void
 usage(void)
 {
-	die("usage: dmenu [-bfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
+	die("usage: dmenu [-bcfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
 	    "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]");
 }
 
@@ -735,9 +751,19 @@ main(int argc, char *argv[])
 		if (!strcmp(argv[i], "-v")) {      /* prints version information */
 			puts("dmenu-"VERSION);
 			exit(0);
-		} else if (!strcmp(argv[i], "-b")) /* appears at the bottom of the screen */
+		} else if (!strcmp(argv[i], "-c")) /* appears at the center of the screen */ {
+			if (topbar == 0) {
+				puts("Args -b and -c cannot be used together.");
+				exit(1);
+			}
+			ctr_flg = 1;
+		} else if (!strcmp(argv[i], "-b")) /* appears at the bottom of the screen */ {
+			if (ctr_flg == 1) {
+				puts("Args -b and -c cannot be used together.");
+				exit(1);
+			}
 			topbar = 0;
-		else if (!strcmp(argv[i], "-f"))   /* grabs keyboard before reading stdin */
+		} else if (!strcmp(argv[i], "-f"))   /* grabs keyboard before reading stdin */
 			fast = 1;
 		else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
 			fstrncmp = strncasecmp;
