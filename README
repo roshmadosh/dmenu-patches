@@ -7,6 +7,7 @@ Patches include:
 - Tab + Shift-Tab keybinds for moving the cursor between options.
 - A `-c` option for making dmenu "float" in the center of the screen.
 - Prompt text and input moved above the options.
+- `SchemePrompt` for prompt color.
 
 Testing
 ------------
